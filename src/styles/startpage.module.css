@@ -1,0 +1,119 @@
+.title {
+    margin-top: 110px;
+    text-align: center;
+    font-size: 80px;
+    font-weight: lighter;
+    font-style: italic;
+  }
+
+.core {
+display: flex;
+justify-content: center;
+align-items: center;
+margin-top: 80px;
+}
+
+.img {
+height: 230px;
+margin: 0 10px 0 10px;
+}
+
+.img1,
+.img2 {
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 0 30px 0 30px;
+height: 100%;
+}
+
+.btns {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+/* margin: 0 0 0 40px; */
+}
+
+.btnSignIn,
+.btnSignUp {
+margin-top: 40px;
+background-color: #CDE990;
+width: 300px;
+height: 56px;
+border-radius: 30px;
+border-color: #ABCA67;
+font-size: 25px;
+}
+
+.btn {
+margin: 0 10px;
+display: block;
+z-index: 1;
+}
+
+
+.img1 {
+order: 1;
+/* margin-right: 36%; */
+}
+
+.btns {
+order: 2;
+}
+
+.img2 {
+order: 3;
+/* margin-left: 36%; */
+}
+
+@media (max-width: 1024px) {
+    .img {
+      height: 190px;
+      margin: 14px 5px 0 5px;
+    }
+  
+    .btnSignIn,
+    .btnSignUp {
+      margin-top: 30px;
+      width: 290px;
+      height: 53px;
+      font-size: 22px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .img {
+      height: 150px;
+      margin: 30px 0 0 0;
+    }
+  
+    .btnSignIn,
+    .btnSignUp {
+      margin-top: 30px;
+      width: 250px;
+      height: 49px;
+      font-size: 18px;
+    }
+  
+    .btn {
+      margin: 0;
+    }
+  
+    .title {
+      margin-top: 120px;
+      text-align: center;
+      font-size: 70px;
+    }
+  }
+  
+  @media (max-width: 670px) {
+    .img1,
+    .img2 {
+      display: none;
+    }
+  
+    .title {
+      margin: 120px 0 90px 0;
+    }
+  }

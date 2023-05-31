@@ -1,0 +1,33 @@
+@import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
+
+* {
+  font-family: Galmuri9, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* button */
+button {
+  /* width, height은 알아서 */
+  background-color: #CDE990;
+  border: solid #ABCA67 3px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* button hover 효과 */
+button:hover {
+  color: #FFFDE8;
+  background-color: #ABCA67;
+}
+
+button:not(:hover) {
+  background-color: #CDE990;
+}
