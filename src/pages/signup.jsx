@@ -107,10 +107,10 @@ function signup() {
 
         switch (error.code) {
           case 'auth/invalid-email':
-            errorMessage = ('잘못된 이메일 주소입니다');
+            errorMessage = ('유효하지 않은 이메일 형식입니다.');
             break;
           case 'auth/email-already-in-use':
-            errorMessage = ('이미 가입되어 있는 계정입니다');
+            errorMessage = ('이미 가입되어 있는 계정입니다.');
             break;
           default:
             errorMessage = ert(error);

@@ -4,6 +4,7 @@ import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import firebase from '../../firebase';
 import { doc, getFirestore, getDoc, updateDoc, setDoc } from 'firebase/firestore';
 import styles from '../styles/characters.module.css';
+import Swal from 'sweetalert2';
 
 function Characters() {
     const router = useRouter();
@@ -27,10 +28,21 @@ function Characters() {
     }, []);
 
     const chkChar = () => {
-        let chk = confirm("해당 캐릭터를 선택하시겠나요?");
-        if (chk) {
-            handleSubmit();
-        }
+        Swal.fire({
+            title: "해당 캐릭터를 선택하시겠나요?",
+            html: `
+            캐릭터는 한 번만 선택할 수 있어요.
+            `,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            showCancelButton: true,
+            icon: 'question',
+        }).then(result => {
+            if (result.isConfirmed) {
+                handleSubmit();
+            }
+        })
+
     }
 
     // 버튼 누르면 실행
@@ -62,12 +74,29 @@ function Characters() {
                     characterId: selectedCharacter,
                 });
                 console.log('캐릭터 정보가 성공적으로 업데이트되었습니다.');
-                alert("캐릭터가 저장되었습니다!");
+                Swal.fire({
+                    title: "캐릭터 저장",
+                    html: `
+                    캐릭터를 성공적으로 저장했습니다.
+                    `,
+                    showCancelButton: false,
+                    confirmButtonText: "확인",
+                    icon: 'success',
+                })
             } else {
                 await setDoc(userDocRef, {
                     characterId: selectedCharacter,
                 });
                 console.log('사용자 문서가 생성되었고, 캐릭터 정보가 성공적으로 업데이트되었습니다.');
+                Swal.fire({
+                    title: "캐릭터 저장",
+                    html: `
+                    캐릭터를 성공적으로 저장했습니다.
+                    `,
+                    showCancelButton: false,
+                    confirmButtonText: "확인",
+                    icon: 'success',
+                })
             }
         } catch (error) {
             console.log('캐릭터 정보 업데이트 중 오류가 발생했습니다:', error);
