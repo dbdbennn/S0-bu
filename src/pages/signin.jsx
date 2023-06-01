@@ -38,6 +38,18 @@ function Signin() {
   const placeholders = windowWidth <= 768 ? ['이메일', '비밀번호'] : ['', ''];
 
   const handleSignIn = () => {
+    if (email === '' || password === '') {
+      let errorMessage = ("빈 칸 없이 작성해주세요.")
+
+      Swal.fire({
+        title: "로그인 실패",
+        html: errorMessage,
+        showCancelButton: false,
+        confirmButtonText: "확인",
+        icon: 'warning',
+      })
+      return;
+    }
     const auth = getAuth(firebaseApp);
 
     signInWithEmailAndPassword(auth, email, password)
