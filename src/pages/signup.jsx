@@ -3,6 +3,7 @@ import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase
 import styles from "../styles/signup.module.css";
 import firebaseApp from "../../firebase";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2"
 
 function signup() {
   const inputRef = useRef(null);
@@ -44,7 +45,15 @@ function signup() {
   const handleRegisterClick = () => {
     let chkpw = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
     if (email === '' || nickname === '' || password === '' || passwordConfirmation === '') {
-      alert("빈 칸 없이 작성해주세요.")
+      let errorMessage = ("빈 칸 없이 작성해주세요.")
+
+      Swal.fire({
+        title: "회원가입 실패",
+        html: errorMessage,
+        showCancelButton: false,
+        confirmButtonText: "확인",
+        icon: 'warning',
+      })
       return;
     }
 
@@ -55,7 +64,14 @@ function signup() {
 
     // 비밀번호 일치 여부 확인
     if (password !== passwordConfirmation) {
-      alert('비밀번호가 일치하지 않습니다.');
+      let errorMessage = ('비밀번호가 일치하지 않습니다.');
+      Swal.fire({
+        title: "회원가입 실패",
+        html: errorMessage,
+        showCancelButton: false,
+        confirmButtonText: "확인",
+        icon: 'warning',
+      })
       return;
     }
 
@@ -70,7 +86,15 @@ function signup() {
         })
           .then(() => {
             console.log(result.user);
-            alert('회원가입 성공!');
+            Swal.fire({
+              title: "회원가입 성공!",
+              html: `
+              회원가입에 성공했습니다.
+              `,
+              showCancelButton: false,
+              confirmButtonText: "확인",
+              icon: 'success',
+            })
             router.push(`/characters?userId=${result.user.uid}`);
           })
           .catch((error) => {
@@ -79,17 +103,27 @@ function signup() {
       })
       // 유저 생성 중 에러 발생
       .catch((error) => {
+        let errorMessage = '';
+
         switch (error.code) {
           case 'auth/invalid-email':
-            alert('잘못된 이메일 주소입니다');
+            errorMessage = ('잘못된 이메일 주소입니다');
             break;
           case 'auth/email-already-in-use':
-            alert('이미 가입되어 있는 계정입니다');
+            errorMessage = ('이미 가입되어 있는 계정입니다');
             break;
           default:
-            alert(error);
+            errorMessage = ert(error);
             break;
         }
+
+        Swal.fire({
+          title: "회원가입 실패",
+          html: errorMessage,
+          showCancelButton: false,
+          confirmButtonText: "확인",
+          icon: 'warning',
+        })
       });
   };
 
