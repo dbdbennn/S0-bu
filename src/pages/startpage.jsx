@@ -7,7 +7,9 @@ function StartPage() {
 
   return (
     <>
-      <h1 className={styles.title}>STUDY-0</h1>
+      <div className={styles.logoContainer}>
+        <img className={styles.logo} src="/images/logo.png" />
+      </div>
       <div className={styles.core}>
         <div className={styles.img1}>
           <img className={styles.img} src="/images/girl_shorthair.png" alt="g1" />
