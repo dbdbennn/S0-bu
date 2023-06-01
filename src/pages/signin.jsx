@@ -28,6 +28,12 @@ function Signin() {
     };
   }, []);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   const placeholders = windowWidth <= 768 ? ['이메일', '비밀번호'] : ['', ''];
 
   const handleSignIn = () => {
