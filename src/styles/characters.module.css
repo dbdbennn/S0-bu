@@ -1,0 +1,125 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.title {
+    font-size: 50px;
+    margin-left: 15px;
+    margin-bottom: 30px;
+}
+
+.divNontitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.charactersDiv {
+    width: 920px;
+    border-radius: 20px;
+    background-color: #FFFDE8;
+    border: solid #F4EB95 3px;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 45px;
+}
+
+.select {
+    /* background-color: #CDE990;
+     border: solid #ABCA67 3px; */
+    font-size: 26px;
+    text-align: center;
+    border-radius: 20px;
+    margin-top: 18px;
+    margin-bottom: 25px;
+    visibility: hidden;
+    color: #666;
+}
+
+.imgSelectDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.imgs {
+    height: 230px;
+    width: 180px;
+    object-fit: contain;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+}
+
+.imgs:hover {
+    cursor: pointer;
+}
+
+.register {
+    margin-top: 30px;
+    width: 500px;
+    height: 86px;
+    font-size: 33px;
+}
+
+@media screen and (max-width:1024px) {
+    .title {
+        font-size: 40px;
+        margin-bottom: 35px;
+    }
+
+    .charactersDiv {
+        width: 700px;
+        padding-top: 35px;
+    }
+
+    .register {
+        width: 360px;
+        height: 68px;
+        font-size: 30px;
+    }
+
+    .imgs {
+        height: 180px;
+        width: 130px;
+    }
+
+    .select {
+        font-size: 20px;
+        margin-top: 10px;
+        margin-bottom: 13px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 35px;
+        margin-bottom: 30px;
+    }
+
+    .charactersDiv {
+        width: 560px;
+        padding-top: 30px;
+    }
+
+    .register {
+        width: 300px;
+        height: 60px;
+        font-size: 22px;
+        margin-top: 20px;
+    }
+
+    .imgs {
+        height: 140px;
+        width: 100px;
+    }
+
+    .select {
+        font-size: 18px;
+        margin-top: 8px;
+        margin-bottom: 10px;
+    }
+}

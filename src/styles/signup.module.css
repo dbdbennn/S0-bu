@@ -1,0 +1,124 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 50px;
+    margin-bottom: 50px;
+    text-align: left;
+}
+
+.flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.inputDiv {
+    display: flex;
+    align-items: center;
+    margin-right: 291px;
+}
+
+.label {
+    font-size: 30px;
+    width: 261px;
+    text-align: right;
+    margin-right: 30px;
+}
+
+.input {
+    background-color: #FFFDE8;
+    border: solid #F4EB95 3px;
+    width: 520px;
+    height: 80px;
+    font-size: 30px;
+    text-align: center;
+    border-radius: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.register {
+    margin-top: 30px;
+    width: 560px;
+    height: 86px;
+    font-size: 33px;
+}
+
+.message {
+    font-size: 15px;
+    color: #ff3d3d;
+}
+
+@media screen and (max-width:1024px) {
+    .title {
+        font-size: 40px;
+        margin-bottom: 40px;
+    }
+
+    .input {
+        width: 320px;
+        height: 60px;
+        font-size: 22px;
+    }
+
+    .register {
+        width: 360px;
+        height: 68px;
+        font-size: 30px;
+        margin-top: 20px;
+    }
+
+    .label {
+        font-size: 22px;
+        width: 153.61px;
+    }
+
+    .inputDiv {
+        margin-right: 183.61px;
+    }
+
+    .flex {
+        gap: 20px;
+    }
+
+    .message {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 35px;
+        margin-bottom: 35px;
+    }
+
+    .input {
+        width: 280px;
+        height: 60px;
+        font-size: 20px;
+    }
+
+    .register {
+        width: 320px;
+        height: 68px;
+        font-size: 24px;
+        margin-top: 20px;
+    }
+
+    .label {
+        display: none;
+    }
+
+    .inputDiv {
+        margin-right: 0px;
+    }
+
+    .message {
+        font-size: 10px;
+    }
+}
