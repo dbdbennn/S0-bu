@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Styles from '../styles/mypage.module.css';
 import navStyles from '../styles/nav.module.css';
-import logo from '../../public/logo.png';
+import logo from '../../public/images/logo.png';
 import leftIcon from '../../public/images/free-icon-font-angle-left-3916934.svg';
 import rightIcon from '../../public/images/free-icon-font-angle-right-3916924.svg';
 import userImg from '../../public/images/user1.png'

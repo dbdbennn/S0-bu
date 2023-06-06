@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from '../../public/logo.png';
+import logo from '../../public/images/logo.png';
 import styles from '../styles/community.module.css';
 import navStyles from '../styles/nav.module.css';
 import Image from 'next/image';
