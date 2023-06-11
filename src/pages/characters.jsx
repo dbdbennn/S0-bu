@@ -74,6 +74,7 @@ function Characters() {
                     characterId: selectedCharacter,
                 });
                 console.log('캐릭터 정보가 성공적으로 업데이트되었습니다.');
+                router.push(`/characters?userId=${user.uid}`);
                 Swal.fire({
                     title: "캐릭터 저장",
                     html: `
@@ -83,10 +84,12 @@ function Characters() {
                     confirmButtonText: "확인",
                     icon: 'success',
                 })
+                
             } else {
                 await setDoc(userDocRef, {
                     characterId: selectedCharacter,
                 });
+                router.push(`/mypage?userId=${user.uid}`);
                 console.log('사용자 문서가 생성되었고, 캐릭터 정보가 성공적으로 업데이트되었습니다.');
                 Swal.fire({
                     title: "캐릭터 저장",

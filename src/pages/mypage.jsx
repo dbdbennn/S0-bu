@@ -1,16 +1,98 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { useRouter } from 'next/router';
+import firebase from '../../firebase';
 import Styles from '../styles/mypage.module.css';
 import navStyles from '../styles/nav.module.css';
 import logo from '../../public/images/logo.png';
 import leftIcon from '../../public/images/free-icon-font-angle-left-3916934.svg';
 import rightIcon from '../../public/images/free-icon-font-angle-right-3916924.svg';
-import userImg from '../../public/images/user1.png'
+import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
 import Image from 'next/image';
+import Swal from 'sweetalert2';
 
-function App() {
+function MyPage() {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [dateGridItems, setDateGridItems] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [profileImg, setProfileImg] = useState('');
+  const router = useRouter();
+
+  // 페이지 로드 시 로그인 상태 확인
+  useEffect(() => {
+    const auth = getAuth(firebase);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedIn(true);
+        console.log("로그인 상태: 로그인됨" + user.uid);
+
+        // 사용자 정보 가져오기
+        const { displayName, email, uid } = user;
+        setDisplayName(displayName);
+        setEmail(email);
+
+        // 사용자 프로필 이미지 가져오기
+        const firestore = getFirestore(firebase);
+        const userCollection = collection(firestore, 'users');
+        const userDocRef = doc(userCollection, uid);
+        getDoc(userDocRef)
+          .then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+              const { characterId } = docSnapshot.data();
+              // characterId에 따라 프로필 이미지 설정
+              if (characterId === 'girl_shorthair') {
+                setProfileImg('/images/girl_shorthair_p.png');
+              } else if (characterId === 'girl_longhair') {
+                setProfileImg('/images/girl_longhair_p.png');
+              } else if (characterId === 'boy_blackhair') {
+                setProfileImg('/images/boy_blackhair_p.png');
+              } else if (characterId === 'boy_brownhair') {
+                setProfileImg('/images/boy_brownhair_p.png');
+              }
+            }
+          })
+          .catch((error) => {
+            console.log('Error getting user profile:', error);
+          });
+          } else {
+            setLoggedIn(false);
+            console.log("로그인 상태: 로그인되지 않음");
+          }
+        });
+
+        return () => {
+          unsubscribe();
+        };
+  }, []);
+
+  const handleLogout = () => {
+    const auth = getAuth(firebase);
+    signOut(auth)
+      .then(() => {
+        console.log('로그아웃 성공');
+        router.push('/startpage'); // startpage로 이동
+      })
+      .catch((error) => {
+        console.log('로그아웃 에러:', error);
+      });
+  };
+
+  const chkLogout = () => {
+    Swal.fire({
+      title: "로그아웃 하시겠나요?",
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+      showCancelButton: true,
+      icon: 'question',
+    }).then(result => {
+        if (result.isConfirmed) {
+            handleLogout();
+        }
+    })
+  }
 
   // 달력 및 공부 시간 변경
   useEffect(() => {
@@ -112,12 +194,14 @@ function App() {
       <div className={Styles.container}>
         <div className={Styles.container1}>
           <div className={Styles.user}>
-            <Image className={Styles.profile} src={userImg} alt="프로필" />
+            <Image className={Styles.profile} src={profileImg} alt="프로필"
+            width={150}
+            height={150} />
 
             <div className={Styles.userinfo}>
-              <p className={Styles.username}>양혜원</p>
-              <p className={Styles.useremail}>w2106@e-mirim.hs.kr</p>
-              <button className={Styles.userLogout}>로그아웃</button>
+              <p className={Styles.username}>{displayName}</p>
+              <p className={Styles.useremail}>{email}</p>
+              <button className={Styles.userLogout} onClick={chkLogout}>로그아웃</button>
             </div>
           </div>
 
@@ -175,4 +259,4 @@ function App() {
   );
 }
 
-export default App;
+export default MyPage;

@@ -2,13 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getAuth, signInWithEmailAndPassword, AuthErrorCodes } from 'firebase/auth';
 import firebaseApp from '../../firebase';
 import styles from '../styles/signin.module.css';
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
+import { useRouter } from "next/router";
+
 
 function Signin() {
   const inputRef = useRef(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [windowWidth, setWindowWidth] = useState();
+  const router = useRouter();
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -39,7 +42,7 @@ function Signin() {
 
   const handleSignIn = () => {
     if (email === '' || password === '') {
-      let errorMessage = ("빈 칸 없이 작성해주세요.")
+      let errorMessage = "빈 칸 없이 작성해주세요.";
 
       Swal.fire({
         title: "로그인 실패",
@@ -47,53 +50,54 @@ function Signin() {
         showCancelButton: false,
         confirmButtonText: "확인",
         icon: 'warning',
-      })
-      return;
-    }
-    const auth = getAuth(firebaseApp);
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Handle successful sign-in
-        const user = userCredential.user;
-        Swal.fire({
-          title: "로그인 성공",
-          html: `
-          로그인에 성공했습니다.
-          `,
-          showCancelButton: false,
-          confirmButtonText: "확인",
-          icon: 'success',
-        })
-        console.log('Successfully signed in:', user);
-      })
-      .catch((error) => {
-        // Handle sign-in error
-        console.error('Sign-in error:', error);
-        const errorCode = error.code;
-        let errorMessage = '';
-
-        switch (errorCode) {
-          case AuthErrorCodes.INVALID_EMAIL:
-            errorMessage = '유효하지 않은 이메일 형식입니다.';
-            break;
-          case 'auth/user-not-found':
-          case 'auth/wrong-password':
-            errorMessage = '이메일 또는 비밀번호가 잘못되었습니다.';
-            break;
-          default:
-            errorMessage = '로그인에 실패했습니다.';
-            break;
-        }
-
-        Swal.fire({
-          title: "로그인 실패",
-          html: errorMessage,
-          showCancelButton: false,
-          confirmButtonText: "확인",
-          icon: 'warning',
-        })
       });
+    } else {
+      const auth = getAuth(firebaseApp);
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          Swal.fire({
+            title: "로그인 성공",
+            html: `
+              로그인에 성공했습니다.
+            `,
+            showCancelButton: false,
+            confirmButtonText: "확인",
+            icon: 'success',
+          });
+          router.push(`/mypage?userId=${user.uid}`);
+
+          console.log('Successfully signed in:', user);
+        })
+        .catch((error) => {
+          console.error('Sign-in error:', error);
+          const errorCode = error.code;
+          let errorMessage = '';
+
+          switch (errorCode) {
+            case AuthErrorCodes.INVALID_EMAIL:
+              errorMessage = '유효하지 않은 이메일 형식입니다.';
+              break;
+            case 'auth/user-not-found':
+            case 'auth/wrong-password':
+              errorMessage = '이메일 또는 비밀번호가 잘못되었습니다.';
+              break;
+            default:
+              errorMessage = '로그인에 실패했습니다.';
+              break;
+          }
+
+          Swal.fire({
+            title: "로그인 실패",
+            html: errorMessage,
+            showCancelButton: false,
+            confirmButtonText: "확인",
+            icon: 'warning',
+          });
+        });
+    }
   };
 
   return (
