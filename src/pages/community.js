@@ -1,14 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import logo from '../../public/images/logo.png';
 import styles from '../styles/community.module.css';
 import navStyles from '../styles/nav.module.css';
 import Image from 'next/image';
+import io from 'socket.io-client';
+import firebase from '../../firebase';
+import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 function Community() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [roomID, setRoomID] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
+  const router = useRouter();
+
+  // 페이지 로드 시 로그인 상태 확인
+  useEffect(() => {
+    const auth = getAuth(firebase);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedIn(true);
+        console.log("로그인 상태: 로그인됨" + user.uid);
+
+        // 사용자 정보 가져오기
+        const { displayName, email, uid } = user;
+        setDisplayName(displayName);
+        setEmail(email);
+
+        // 사용자 프로필 이미지 가져오기
+        const firestore = getFirestore(firebase);
+        const userCollection = collection(firestore, 'users');
+        const userDocRef = doc(userCollection, uid);
+        getDoc(userDocRef)
+        .then((docSnapshot) => {
+          if (docSnapshot.exists()) {
+            const { characterId } = docSnapshot.data();
+          }
+        })
+        .catch((error) => {
+          console.log('Error getting user profile:', error);
+        });
+      } else {
+        setLoggedIn(false);
+        console.log("로그인 상태: 로그인되지 않음");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const openModal = () => {
     setShowModal(true);
@@ -16,13 +62,9 @@ function Community() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle the form submission (e.g., send data to a server)
-    // You can access the entered title and content from the title and content state variables
-    // Reset the title and content state variables
     setTitle('');
     setContent('');
     setRoomID('');
-    // Close the modal
     setShowModal(false);
   };
 
@@ -50,7 +92,6 @@ function Community() {
       setRoomID(inputValue);
     }
   };
-
 
   return (
     <div className={styles.App}>
@@ -128,7 +169,8 @@ function Community() {
               value={content}
               onChange={handleContentChange}
             ></textarea>
-            <span className={styles.counter}>({wordCount}/200)</span><br></br>
+            <span className={styles.counter}>({wordCount}/200)</span>
+            <br></br>
             <input
               type="text"
               placeholder="스터디룸 ID"
