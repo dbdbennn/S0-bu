@@ -7,6 +7,11 @@ import navStyles from '../styles/nav.module.css';
 import logo from '../../public/images/logo.png';
 import leftIcon from '../../public/images/free-icon-font-angle-left-3916934.svg';
 import rightIcon from '../../public/images/free-icon-font-angle-right-3916924.svg';
+/* 학생 사진 import */
+import girl_shorthair from '../../public/images/girl_shorthair_p.png'
+import girl_longhair from '../../public/images/girl_longhair_p.png'
+import boy_blackhair from '../../public/images/boy_blackhair_p.png'
+import boy_brownhair from '../../public/images/boy_brownhair_p.png'
 import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
 import Image from 'next/image';
 import Swal from 'sweetalert2';
@@ -44,13 +49,13 @@ function MyPage() {
               const { characterId } = docSnapshot.data();
               // characterId에 따라 프로필 이미지 설정
               if (characterId === 'girl_shorthair') {
-                setProfileImg('/images/girl_shorthair_p.png');
+                setProfileImg(girl_shorthair);
               } else if (characterId === 'girl_longhair') {
-                setProfileImg('/images/girl_longhair_p.png');
+                setProfileImg(girl_longhair);
               } else if (characterId === 'boy_blackhair') {
-                setProfileImg('/images/boy_blackhair_p.png');
+                setProfileImg(boy_blackhair);
               } else if (characterId === 'boy_brownhair') {
-                setProfileImg('/images/boy_brownhair_p.png');
+                setProfileImg(boy_brownhair);
               }
             }
           })

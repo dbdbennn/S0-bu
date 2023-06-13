@@ -125,17 +125,11 @@ function Characters() {
         setSelectedCharacter(id);
     };
 
-    const widthAuto = () => {
-        let next = document.getElementById("__next");
-        next.style.width = "auto";
-    }
-
-    widthAuto();
 
     return (
         <div className={styles.container}>
-            <div className={styles.title}>characters</div>
             <div className={styles.divNontitle}>
+            <div className={styles.title}>characters</div>
                 <div className={styles.charactersDiv}>
                     <div className={styles.imgSelectDiv}>
                         <img
