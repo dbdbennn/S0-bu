@@ -6,6 +6,7 @@ import { doc, getFirestore, getDoc, updateDoc, setDoc } from 'firebase/firestore
 import styles from '../styles/characters.module.css';
 import Swal from 'sweetalert2';
 
+
 function Characters() {
     const router = useRouter();
     const [selectedCharacter, setSelectedCharacter] = useState(null);
@@ -123,6 +124,13 @@ function Characters() {
         selected.style.visibility = "visible";
         setSelectedCharacter(id);
     };
+
+    const widthAuto = () => {
+        let next = document.getElementById("__next");
+        next.style.width = "auto";
+    }
+
+    widthAuto();
 
     return (
         <div className={styles.container}>
