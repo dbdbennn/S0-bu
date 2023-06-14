@@ -10,7 +10,7 @@ function study() {
   const [showTimer, setShowTimer] = useState(false);
 
   return (
-    <div className={styels.background}>
+    <div className={styels.App}>
       <nav className={navStyles.nav}>
         <div className={navStyles['nav-container']}>
           <a className={navStyles.logo} href="/">
@@ -26,12 +26,13 @@ function study() {
           </ul>
         </div>
       </nav>
-      <div className={styels.test}>
 
-        <h1>Timer</h1>
-          {showTimer && <Timer />}
-        <button onClick={() => setShowTimer(!showTimer)}>Toggle Timer</button>
-        
+      <div className={styels.studyContainer}>
+        <div className={styels.timer}>
+          <h1>Timer</h1>
+            {showTimer && <Timer />}
+          <button onClick={() => setShowTimer(!showTimer)}>Toggle Timer</button>
+        </div>
       </div>
     </div>
   );
