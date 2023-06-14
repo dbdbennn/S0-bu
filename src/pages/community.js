@@ -5,7 +5,6 @@ import styles from '../styles/community.module.css';
 import navStyles from '../styles/nav.module.css';
 import Image from 'next/image';
 import firebase from '../../firebase';
-import { getFirestore, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import io from 'socket.io-client';
 
@@ -35,7 +34,8 @@ function Community() {
         setEmail(email);
 
         // 사용자 정보를 서버로 전송
-        socket.emit('userConnected', { displayName, email });
+        const pagePath = router.pathname;
+        socket.emit('userConnected', { displayName, email, pagePath });
       } else {
         setLoggedIn(false);
         console.log('로그인 상태: 로그인되지 않음');
@@ -50,7 +50,7 @@ function Community() {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [router.pathname]);
 
   // ...
 

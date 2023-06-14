@@ -23,8 +23,22 @@ app.use(express.static(__dirname + '/public'));
 io.on('connection', (socket) => {
   console.log('a user connected');
 
+  // Firestore 문서 참조 변수
+  let studyroomRef;
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
+
+    if (studyroomRef) {
+      // Firebase Firestore에서 해당 필드 제거
+      studyroomRef.update({ email: admin.firestore.FieldValue.delete() })
+        .then(() => {
+          console.log('User email removed from Firestore');
+        })
+        .catch((error) => {
+          console.error('Error removing user email from Firestore:', error);
+        });
+    }
   });
 
   socket.on('userConnected', (userInfo) => {
@@ -34,9 +48,12 @@ io.on('connection', (socket) => {
     const userEmail = userInfo.email;
     console.log('User email:', userEmail);
 
+    // 페이지 경로 가져오기
+    const pagePath = userInfo.pagePath;
+    console.log('Page path:', pagePath);
+
     // Firestore에 문서 생성 또는 가져오기
-    //.doc(문서명)
-    const studyroomRef = db.collection('studyroom').doc('test2');
+    studyroomRef = db.collection('studyroom').doc(pagePath);
     studyroomRef.get()
       .then((doc) => {
         if (doc.exists) {
