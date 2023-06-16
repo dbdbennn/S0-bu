@@ -41,6 +41,8 @@ function MyPage() {
         setDisplayName(displayName);
         setEmail(email);
 
+        calculateMonthTotal(year, month);
+
         // 사용자 프로필 이미지 가져오기
         const firestore = getFirestore(firebase);
         const userCollection = collection(firestore, 'users');
