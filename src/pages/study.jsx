@@ -15,6 +15,7 @@ function Study() {
   const db = getFirestore();
   const auth = getAuth();
   const currentDate = format(new Date(), 'yyyyMMdd'); // 현재 날짜를 YYYYMMDD 형식으로 포맷
+  const [roomId, setRoomId] = useState('');
 
   const [studyTime, setStudyTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
@@ -71,10 +72,22 @@ function Study() {
       </nav>
 
       <div className={styles.studyContainer}>
+      <div className={styles.box}>
+        {roomId && (
+          <img
+            src={`/study/${roomId}`}
+            className={styles.desk_img}
+            alt="Girl with long hair at the desk"
+          />
+        )}
+        </div>
+
         <div className={styles.timer}>
           <h1>Timer</h1>
           <Timer studyTime={studyTime} setStudyTime={setStudyTime} />
         </div>
+
+        
       </div>
     </div>
   );

@@ -16,7 +16,6 @@
   height: 100vh;
   display: flex;
   justify-content: flex-end;
-
   overflow-y: scroll;
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
   scrollbar-width: none; /* 파이어폭스 */
@@ -33,4 +32,19 @@
 
 .btnStart {
   margin-right: 6px;
+}
+
+.box {
+  display: grid;
+  width: 60%;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  position: relative;
+  justify-items: center;
+  align-items: center;
+}
+
+.desk_img{
+  width: 50%;
 }
