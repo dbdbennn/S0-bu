@@ -19,6 +19,7 @@ function Community() {
   const [userEmail, setUserEmail] = useState('');
   const router = useRouter();
 
+  //소켓 클라이언트 코드 시작점
   useEffect(() => {
     const socket = io.connect('http://localhost:4000');
 
@@ -51,13 +52,15 @@ function Community() {
       unsubscribe();
     };
   }, [router.pathname]);
+  //소켓 클라이언트 코드 끝
 
-  // ...
 
+  //현재 접속한 이메일 출력, 소켓코드와 함께 옮기기
   useEffect(() => {
     console.log('User email in Community:', userEmail);
   }, [userEmail]);
 
+  
 
   const openModal = () => {
     setShowModal(true);
