@@ -12,7 +12,7 @@ import girl_shorthair from '../../public/images/girl_shorthair_p.png'
 import girl_longhair from '../../public/images/girl_longhair_p.png'
 import boy_blackhair from '../../public/images/boy_blackhair_p.png'
 import boy_brownhair from '../../public/images/boy_brownhair_p.png'
-import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import Image from 'next/image';
 import Swal from 'sweetalert2';
 
@@ -24,6 +24,8 @@ function MyPage() {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [profileImg, setProfileImg] = useState('');
+  const [monthTotal, setMonthTotal] = useState('00:00:00'); // 총 공부 시간
+
   const router = useRouter();
 
   // 페이지 로드 시 로그인 상태 확인
@@ -136,7 +138,8 @@ function MyPage() {
     };
 
     setCalendar(year, month);
-  }, [year, month]);
+    calculateMonthTotal(year, month); // 초기 로드 시 총 공부 시간 계산
+}, [year, month]);
 
   const prevMonth = () => {
     let newMonth = month - 1;
@@ -147,8 +150,9 @@ function MyPage() {
     }
     setYear(newYear);
     setMonth(newMonth);
+    calculateMonthTotal(newYear, newMonth); // Update monthTotal
   };
-
+  
   const nextMonth = () => {
     let newMonth = month + 1;
     let newYear = year;
@@ -158,10 +162,8 @@ function MyPage() {
     }
     setYear(newYear);
     setMonth(newMonth);
+    calculateMonthTotal(newYear, newMonth); // Update monthTotal
   };
-
-  // 총 공부 시간
-  const monthTotal = '02:26:00';
 
   // 최근 공부 시간
   const studyTimeData = [
@@ -182,6 +184,59 @@ function MyPage() {
       </tr>
     ));
   };
+
+const calculateMonthTotal = async (newYear, newMonth) => {
+  const auth = getAuth(firebase);
+  const user = auth.currentUser;
+
+  if (user) {
+    const uid = user.uid;
+    const firestore = getFirestore(firebase);
+    const timesCollection = collection(firestore, `times/${uid}/dates`);
+
+    try {
+      const querySnapshot = await getDocs(timesCollection);
+      let totalHours = 0;
+      let totalMinutes = 0;
+      let totalSeconds = 0;
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const documentName = doc.id; // 문서 이름 (yyyyMMdd)
+
+        const documentYear = documentName.slice(0, 4);
+        const documentMonth = documentName.slice(4, 6);
+
+        if (documentYear == newYear && documentMonth == newMonth) {
+          // Only consider documents with matching year and month
+          const { hours, minutes, seconds } = data;
+          totalHours += hours || 0;
+          totalMinutes += minutes || 0;
+          totalSeconds += seconds || 0;
+        }
+      });
+
+      // Calculate total time
+      let seconds = totalSeconds % 60;
+      let minutes = Math.floor(totalSeconds / 60) + totalMinutes;
+      let hours = Math.floor(minutes / 60) + totalHours;
+      minutes %= 60;
+
+      // Format hours, minutes, and seconds as two-digit numbers
+      const formattedHours = hours.toString().padStart(2, '0');
+      const formattedMinutes = minutes.toString().padStart(2, '0');
+      const formattedSeconds = seconds.toString().padStart(2, '0');
+
+      const totalTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+      setMonthTotal(totalTime); // 총 공부 시간 업데이트
+      console.log(totalTime);
+    } catch (error) {
+      console.log('Error fetching study time data:', error);
+    }
+  }
+};
+  
+  
 
   return (
     <div className={Styles.App}>
