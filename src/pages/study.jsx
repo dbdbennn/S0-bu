@@ -1,16 +1,36 @@
 import firebase from '../../firebase';
-import styels from '../styles/study.module.css';
-import React, { useState } from 'react';
+import styles from '../styles/study.module.css';
+import React, { useState, useEffect } from 'react';
 import Timer from '../../src/Timer';
 import navStyles from '../styles/nav.module.css';
 import Image from 'next/image';
 import logo from '../../public/images/logo.png';
 
-function study() {
+function Study() {
   const [showTimer, setShowTimer] = useState(false);
+  const [roomId, setRoomId] = useState('');
+
+  useEffect(() => {
+    const fetchRoomId = async () => {
+      try {
+        const docRef = firebase.firestore().collection('posts').doc('1111');
+        const doc = await docRef.get();
+        if (doc.exists) {
+          const data = doc.data();
+          setRoomId(data.roomId);
+        } else {
+          console.log('Document not found');
+        }
+      } catch (error) {
+        console.log('Error fetching roomId:', error);
+      }
+    };
+
+    fetchRoomId();
+  }, []);
 
   return (
-    <div className={styels.App}>
+    <div className={styles.App}>
       <nav className={navStyles.nav}>
         <div className={navStyles['nav-container']}>
           <a className={navStyles.logo} href="/">
@@ -27,15 +47,25 @@ function study() {
         </div>
       </nav>
 
-      <div className={styels.studyContainer}>
-        <div className={styels.timer}>
+      <div className={styles.studyContainer}>
+        <div className={styles.timer}>
           <h1>Timer</h1>
-            {showTimer && <Timer />}
+          {showTimer && <Timer />}
           <button onClick={() => setShowTimer(!showTimer)}>Toggle Timer</button>
         </div>
+      </div>
+
+      <div className={styles.box}>
+        {roomId && (
+          <img
+            src={`/study/${roomId}`}
+            className={styles.desk_img}
+            alt="Girl with long hair at the desk"
+          />
+        )}
       </div>
     </div>
   );
 }
 
-export default study;
+export default Study;
