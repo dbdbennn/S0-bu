@@ -5,29 +5,52 @@ import Timer from '../../src/Timer';
 import navStyles from '../styles/nav.module.css';
 import Image from 'next/image';
 import logo from '../../public/images/logo.png';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useRouter } from 'next/router';
+import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
+import { format } from 'date-fns';
 
 function Study() {
-  const [showTimer, setShowTimer] = useState(false);
-  const [roomId, setRoomId] = useState('');
+  const router = useRouter();
+  const db = getFirestore();
+  const auth = getAuth();
+  const currentDate = format(new Date(), 'yyyyMMdd'); // 현재 날짜를 YYYYMMDD 형식으로 포맷
+
+  const [studyTime, setStudyTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const fetchRoomId = async () => {
-      try {
-        const docRef = firebase.firestore().collection('posts').doc('1111');
-        const doc = await docRef.get();
-        if (doc.exists) {
-          const data = doc.data();
-          setRoomId(data.roomId);
-        } else {
-          console.log('Document not found');
-        }
-      } catch (error) {
-        console.log('Error fetching roomId:', error);
-      }
-    };
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log('로그인 상태: 로그인됨' + user.uid);
 
-    fetchRoomId();
-  }, []);
+        // Firebase에서 시간 가져오기
+        async function fetchStudyTimeFromFirebase() {
+          try {
+            const uid = user.uid;
+            const userDocRef = doc(collection(db, 'times'), uid);
+            const dateDocRef = doc(collection(userDocRef, 'dates'), currentDate);
+            const docSnapshot = await getDoc(dateDocRef);
+
+            if (docSnapshot.exists()) {
+              const { hours, minutes, seconds } = docSnapshot.data();
+              setStudyTime({ hours, minutes, seconds });
+            }
+          } catch (error) {
+            console.error('시간 가져오기 중 오류가 발생했습니다:', error);
+          }
+        }
+
+        fetchStudyTimeFromFirebase();
+      } else {
+        console.log('로그인 상태: 로그인되지 않음');
+        router.push('/signin'); // 로그인되지 않은 경우 /signin 페이지로 이동
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [auth, currentDate, db, router]);
 
   return (
     <div className={styles.App}>
@@ -50,19 +73,8 @@ function Study() {
       <div className={styles.studyContainer}>
         <div className={styles.timer}>
           <h1>Timer</h1>
-          {showTimer && <Timer />}
-          <button onClick={() => setShowTimer(!showTimer)}>Toggle Timer</button>
+          <Timer studyTime={studyTime} setStudyTime={setStudyTime} />
         </div>
-      </div>
-
-      <div className={styles.box}>
-        {roomId && (
-          <img
-            src={`/study/${roomId}`}
-            className={styles.desk_img}
-            alt="Girl with long hair at the desk"
-          />
-        )}
       </div>
     </div>
   );
