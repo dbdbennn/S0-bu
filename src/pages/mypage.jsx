@@ -25,7 +25,7 @@ function MyPage() {
   const [email, setEmail] = useState('');
   const [profileImg, setProfileImg] = useState('');
   const [monthTotal, setMonthTotal] = useState('00:00:00'); // 총 공부 시간
-
+  const [studyTimeData, setStudyTimeData] = useState([]);
   const router = useRouter();
 
   // 페이지 로드 시 로그인 상태 확인
@@ -40,7 +40,8 @@ function MyPage() {
         const { displayName, email, uid } = user;
         setDisplayName(displayName);
         setEmail(email);
-
+        
+        fetchStudyTimeData();
         calculateMonthTotal(year, month);
 
         // 사용자 프로필 이미지 가져오기
@@ -81,6 +82,7 @@ function MyPage() {
         };
   }, []);
 
+  // 로그아웃
   const handleLogout = () => {
     const auth = getAuth(firebase);
     signOut(auth)
@@ -106,6 +108,7 @@ function MyPage() {
         }
     })
   }
+  ///////////////////////////////
 
   // 달력 및 공부 시간 변경
   useEffect(() => {
@@ -141,7 +144,7 @@ function MyPage() {
 
     setCalendar(year, month);
     calculateMonthTotal(year, month); // 초기 로드 시 총 공부 시간 계산
-}, [year, month]);
+  }, [year, month]);
 
   const prevMonth = () => {
     let newMonth = month - 1;
@@ -167,17 +170,9 @@ function MyPage() {
     calculateMonthTotal(newYear, newMonth); // Update monthTotal
   };
 
-  // 최근 공부 시간
-  const studyTimeData = [
-    { date: '5/25', time: '02:00:00' },
-    { date: '5/26', time: '02:00:00' },
-    { date: '5/27', time: '02:00:00' },
-    { date: '5/28', time: '02:00:00' },
-    { date: '5/29', time: '02:00:20' },
-    { date: '5/30', time: '02:00:00' },
-    { date: '5/31', time: '02:00:00' },
-  ];
+  ////////////////////////////////////////////
 
+  // studyTimeData을 화면에 출력함
   const renderStudyTimeRows = () => {
     return studyTimeData.map((item, index) => (
       <tr key={index}>
@@ -187,58 +182,133 @@ function MyPage() {
     ));
   };
 
-const calculateMonthTotal = async (newYear, newMonth) => {
-  const auth = getAuth(firebase);
-  const user = auth.currentUser;
+  // 월별 공부 시간
+  const calculateMonthTotal = async (newYear, newMonth) => {
+    const auth = getAuth(firebase);
+    const user = auth.currentUser;
 
-  if (user) {
-    const uid = user.uid;
-    const firestore = getFirestore(firebase);
-    const timesCollection = collection(firestore, `times/${uid}/dates`);
+    if (user) {
+      const uid = user.uid;
+      const firestore = getFirestore(firebase);
+      const timesCollection = collection(firestore, `times/${uid}/dates`);
 
-    try {
-      const querySnapshot = await getDocs(timesCollection);
-      let totalHours = 0;
-      let totalMinutes = 0;
-      let totalSeconds = 0;
+      try {
+        const querySnapshot = await getDocs(timesCollection);
+        let totalHours = 0;
+        let totalMinutes = 0;
+        let totalSeconds = 0;
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const documentName = doc.id; // 문서 이름 (yyyyMMdd)
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const documentName = doc.id; // 문서 이름 (yyyyMMdd)
 
-        const documentYear = documentName.slice(0, 4);
-        const documentMonth = documentName.slice(4, 6);
+          const documentYear = documentName.slice(0, 4);
+          const documentMonth = documentName.slice(4, 6);
 
-        if (documentYear == newYear && documentMonth == newMonth) {
-          // Only consider documents with matching year and month
-          const { hours, minutes, seconds } = data;
-          totalHours += hours || 0;
-          totalMinutes += minutes || 0;
-          totalSeconds += seconds || 0;
-        }
-      });
+          if (documentYear == newYear && documentMonth == newMonth) {
+            // Only consider documents with matching year and month
+            const { hours, minutes, seconds } = data;
+            totalHours += hours || 0;
+            totalMinutes += minutes || 0;
+            totalSeconds += seconds || 0;
+          }
+        });
 
-      // Calculate total time
-      let seconds = totalSeconds % 60;
-      let minutes = Math.floor(totalSeconds / 60) + totalMinutes;
-      let hours = Math.floor(minutes / 60) + totalHours;
-      minutes %= 60;
+        // Calculate total time
+        let seconds = totalSeconds % 60;
+        let minutes = Math.floor(totalSeconds / 60) + totalMinutes;
+        let hours = Math.floor(minutes / 60) + totalHours;
+        minutes %= 60;
 
-      // Format hours, minutes, and seconds as two-digit numbers
-      const formattedHours = hours.toString().padStart(2, '0');
-      const formattedMinutes = minutes.toString().padStart(2, '0');
-      const formattedSeconds = seconds.toString().padStart(2, '0');
+        // Format hours, minutes, and seconds as two-digit numbers
+        const formattedHours = hours.toString().padStart(2, '0');
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+        const formattedSeconds = seconds.toString().padStart(2, '0');
 
-      const totalTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-      setMonthTotal(totalTime); // 총 공부 시간 업데이트
-      console.log(totalTime);
-    } catch (error) {
-      console.log('Error fetching study time data:', error);
+        const totalTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+        setMonthTotal(totalTime); // 총 공부 시간 업데이트
+        console.log(totalTime);
+      } catch (error) {
+        console.log('Error fetching study time data:', error);
+      }
     }
-  }
-};
+  };
+
+  // 지난 7일의 데이터를 저장하고 출력함
+  const fetchStudyTimeData = async () => {
+    const auth = getAuth(firebase);
+    const user = auth.currentUser;
   
+    if (user) {
+      const uid = user.uid;
+      const firestore = getFirestore(firebase);
+      const timesCollection = collection(firestore, `times/${uid}/dates`);
   
+      try {
+        const querySnapshot = await getDocs(timesCollection);
+  
+        const startDate = new Date(); // 현재 날짜
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() - 6); // 최근 7일 전 날짜
+  
+        const studyTimeData = [];
+  
+        // 최근 7일간의 데이터를 저장할 배열 생성
+        const studyTimeDataMap = new Map();
+  
+        querySnapshot.forEach((doc) => {
+          const documentName = doc.id; // 문서 이름 (yyyyMMdd)
+          const documentDate = new Date(
+            documentName.slice(0, 4),
+            parseInt(documentName.slice(4, 6)) - 1,
+            documentName.slice(6, 8)
+          );
+  
+          // 시작 날짜부터 종료 날짜까지의 데이터만 처리
+          if (documentDate >= endDate && documentDate <= startDate) {
+            const { hours, minutes, seconds } = doc.data();
+            console.log(documentDate);
+  
+            // 시간, 분, 초를 두 자리 숫자로 포맷팅
+            const formattedHours = hours.toString().padStart(2, '0');
+            const formattedMinutes = minutes.toString().padStart(2, '0');
+            const formattedSeconds = seconds.toString().padStart(2, '0');
+  
+            // 시간 데이터를 tt:mm:ss 형식으로 저장
+            const time = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+  
+            // 날짜 데이터를 mm/dd 형식으로 저장
+            const date = `${documentDate.getMonth() + 1}/${documentDate.getDate()}`;
+  
+            // studyTimeDataMap에 { date, time } 객체 추가
+            studyTimeDataMap.set(date, time);
+          }
+        });
+  
+        // 7개의 데이터를 생성하고 time이 없는 경우 00:00:00으로 설정
+        for (let i = 0; i < 7; i++) {
+          const currentDate = new Date(startDate);
+          currentDate.setDate(currentDate.getDate() - i);
+  
+          // 날짜 데이터를 mm/dd 형식으로 저장
+          const date = `${currentDate.getMonth() + 1}/${currentDate.getDate()}`;
+          const time = studyTimeDataMap.get(date) || '00:00:00';
+  
+          // studyTimeData에 { date, time } 객체 추가
+          studyTimeData.push({ date, time });
+        }
+  
+        studyTimeData.reverse();
+
+        // studyTimeData 업데이트
+        setStudyTimeData(studyTimeData);
+      } catch (error) {
+        console.log('Error fetching study time data:', error);
+      }
+    }
+  };
+  
+
 
   return (
     <div className={Styles.App}>
