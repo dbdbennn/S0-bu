@@ -113,7 +113,7 @@ function signup() {
             errorMessage = ('이미 가입되어 있는 계정입니다.');
             break;
           default:
-            errorMessage = ert(error);
+            errorMessage = alert(error);
             break;
         }
 
