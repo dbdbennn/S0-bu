@@ -183,11 +183,16 @@ function Community() {
 
     fetchData();
   }, []);
+
   const roomIDInputStyles = roomIdError ? `${styles.inputError}` : '';
 
   const createPost = (post) => {
+    const handlePostClick = () => {
+      router.push(`/${post.roomID}`);
+    };
+
     return (
-      <div className={styles.post}>
+      <div className={styles.post} onClick={handlePostClick}>
         <h1 className={styles['post-title']}>{post.title}</h1>
         <p className={styles['post-writer']}>{nickname}</p>
         <p className={styles['post-date']}>{datestr}</p>
