@@ -127,6 +127,10 @@ function signup() {
       });
   };
 
+  const goToSignin = () => {
+    router.push('/signin');
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -178,6 +182,7 @@ function signup() {
         <button className={styles.register} onClick={handleRegisterClick}>
           next
         </button>
+        <div className={styles.goToSignin} onClick={goToSignin}>로그인</div>
       </div>
     </>
   );

@@ -54,6 +54,16 @@
     color: #ff3d3d;
 }
 
+.goToSignup {
+    font-size: 17px;
+    margin-top: 13px;
+    color: #005a06;
+}
+
+.goToSignup:hover {
+    cursor: pointer;
+}
+
 @media screen and (max-width:1024px) {
     .title {
         font-size: 40px;
