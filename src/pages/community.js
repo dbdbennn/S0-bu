@@ -103,7 +103,7 @@ function Community() {
     <div className={styles.App}>
       <nav className={navStyles.nav}>
         <div className={navStyles['nav-container']}>
-          <a className={navStyles.logo} href="/">
+          <a className={navStyles.logo} href="/community">
             <Image className={navStyles['logo-img']} src={logo} alt="Logo" />
           </a>
           <ul className={navStyles['nav-list']}>

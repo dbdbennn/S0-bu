@@ -1,9 +1,25 @@
 import React from "react";
 import styles from '../styles/startpage.module.css'
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import firebase from '../../firebase'
 
 function StartPage() {
   const router = useRouter();
+  const [loggedIn, setLoggedIn] = useState(false);
+
+
+  useEffect(() => {
+    const auth = getAuth(firebase);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedIn(true);
+        console.log("로그인 상태: 로그인됨" + user.uid);
+        router.push('/community');
+      }
+    })
+  });
 
   return (
     <>
