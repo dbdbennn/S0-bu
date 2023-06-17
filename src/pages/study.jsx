@@ -15,7 +15,7 @@ function Study() {
   const db = getFirestore();
   const auth = getAuth();
   const currentDate = format(new Date(), 'yyyyMMdd'); // 현재 날짜를 YYYYMMDD 형식으로 포맷
-  const [roomId, setRoomId] = useState('');
+  const { roomId } = router.query; // 수정: roomId 변수명을 정확하게 변경
 
   const [studyTime, setStudyTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
@@ -23,6 +23,7 @@ function Study() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('로그인 상태: 로그인됨' + user.uid);
+        console.log('roomID : ' + roomId);
 
         // Firebase에서 시간 가져오기
         async function fetchStudyTimeFromFirebase() {

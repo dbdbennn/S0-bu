@@ -4,7 +4,7 @@ import logo from '../../public/images/logo.png';
 import styles from '../styles/community.module.css';
 import navStyles from '../styles/nav.module.css';
 import Image from 'next/image';
-import firebase from '../../firebase';
+import firebase from 'firebase/app';
 import db from '../net/db';
 import { getDocs, collection, query, orderBy, getFirestore, setDoc, serverTimestamp } from 'firebase/firestore';
 import { doc, getDoc } from 'firebase/firestore';
@@ -39,6 +39,8 @@ function Community() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
+  const [displayName, setDisplayName] = useState('');
+
 
   const router = useRouter();
   const modal = useRef(null);
@@ -170,6 +172,7 @@ function Community() {
     setShowModal(false);
   });
 
+  // 컴포넌트가 마운트될 때 firebase/firestore posts 데이터를 가져와 posts 상태로 설정함
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -188,7 +191,10 @@ function Community() {
 
   const createPost = (post) => {
     const handlePostClick = () => {
-      router.push(`/${post.roomID}`);
+      router.push({
+        pathname: `/study`,
+        query: { roomID: post.roomID }
+      });
     };
 
     return (
@@ -203,38 +209,38 @@ function Community() {
 
 
   // // 소켓 클라이언트 코드 시작점
-  // useEffect(() => {
-  //   const socket = io.connect('http://localhost:4000');
+  useEffect(() => {
+    const socket = io.connect('http://localhost:4000');
 
-  //   const auth = getAuth(firebase);
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setLoggedIn(true);
-  //       console.log('로그인 상태: 로그인됨' + user.uid);
+    const auth = getAuth(firebase);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedIn(true);
+        console.log('로그인 상태: 로그인됨' + user.uid);
 
-  //       // 사용자 정보 가져오기
-  //       const { displayName, email, uid } = user;
-  //       setDisplayName(displayName);
-  //       setEmail(email);
+        // 사용자 정보 가져오기
+        const { displayName, email, uid } = user;
+        setDisplayName(displayName);
+        setEmail(email);
 
-  //       // 사용자 정보를 서버로 전송
-  //       const pagePath = router.pathname;
-  //       socket.emit('userConnected', { displayName, email, pagePath });
-  //     } else {
-  //       setLoggedIn(false);
-  //       console.log('로그인 상태: 로그인되지 않음');
-  //     }
-  //   });
+        // 사용자 정보를 서버로 전송
+        const pagePath = router.pathname;
+        socket.emit('userConnected', { displayName, email, pagePath });
+      } else {
+        setLoggedIn(false);
+        console.log('로그인 상태: 로그인되지 않음');
+      }
+    });
 
-  //   // 서버로부터 전달된 이메일 정보를 받아와서 상태 업데이트
-  //   socket.on('userEmail', (userEmail) => {
-  //     setUserEmail(userEmail);
-  //   });
+    // 서버로부터 전달된 이메일 정보를 받아와서 상태 업데이트
+    socket.on('userEmail', (userEmail) => {
+      setUserEmail(userEmail);
+    });
 
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [router.pathname]);
+    return () => {
+      unsubscribe();
+    };
+  }, [router.pathname]);
   // // 소켓 클라이언트 코드 끝
 
 
@@ -265,7 +271,7 @@ function Community() {
           </div>
         </div>
         {posts.map((post, index) => (
-          <React.Fragment key={index}>{createPost(post)}</React.Fragment>
+        <React.Fragment key={index}>{createPost(post)}</React.Fragment>
         ))}
       </div>
 

@@ -92,3 +92,7 @@ io.on('connection', (socket) => {
 server.listen(4000, () => {
   console.log('listening on *:4000');
 });
+
+app.listen(3000, () => {
+  console.log('Express app listening on port 3000');
+});
