@@ -237,7 +237,7 @@ function Community() {
 
     // 서버로부터 전달된 이메일 정보를 받아와서 상태 업데이트
     socket.on('userEmail', (userEmail) => {
-      setUserEmail(userEmail);
+      setEmail(userEmail);
     });
 
     return () => {
