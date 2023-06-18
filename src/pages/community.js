@@ -248,15 +248,15 @@ function Community() {
     <div className={styles.App}>
       <nav className={navStyles.nav}>
         <div className={navStyles['nav-container']}>
-          <a className={navStyles.logo} href="/">
+          <a className={navStyles.logo} href="/community">
             <Image className={navStyles['logo-img']} src={logo} alt="Logo" />
           </a>
           <ul className={navStyles['nav-list']}>
             <li className={navStyles.community}>
-              <a href="Community">Community</a>
+              <a href="community">Community</a>
             </li>
             <li className={navStyles.mypage}>
-              <a href="MyPage">My Page</a>
+              <a href="mypage">My Page</a>
             </li>
           </ul>
         </div>
