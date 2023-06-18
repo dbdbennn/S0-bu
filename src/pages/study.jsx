@@ -23,7 +23,7 @@ function Study() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('로그인 상태: 로그인됨' + user.uid);
-        console.log('roomID : ' + roomID);
+        console.log('roomID : ' + router.query.roomId);
 
         // Firebase에서 시간 가져오기
         async function fetchStudyTimeFromFirebase() {
