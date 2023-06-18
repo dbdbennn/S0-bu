@@ -164,6 +164,10 @@ outline: none;
     user-select: none;
 }
 
+.errorMessage {
+    color: red;
+}
+
 /* tablet */
 @media screen and (max-width: 1024px) {
     .post {

@@ -99,7 +99,10 @@ function Community() {
     const inputValue = e.target.value;
     const englishRegex = /^[a-zA-Z0-9]*$/;
     if (englishRegex.test(inputValue) && inputValue.length <= 20) {
+      setRoomIdError(false);
       setRoomID(inputValue);
+    } else {
+      setRoomIdError(true);
     }
   };
 
@@ -182,7 +185,7 @@ function Community() {
       } catch (error) {
         // Handle error
       }
-    };    
+    };
 
     fetchData();
   }, []);
@@ -271,7 +274,7 @@ function Community() {
           </div>
         </div>
         {posts.map((post, index) => (
-        <React.Fragment key={index}>{createPost(post)}</React.Fragment>
+          <React.Fragment key={index}>{createPost(post)}</React.Fragment>
         ))}
       </div>
 
