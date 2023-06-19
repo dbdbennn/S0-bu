@@ -175,8 +175,6 @@ function Community() {
   let month = today.getMonth() + 1; // 월
   let date = today.getDate(); // 날짜
 
-  console.log(year + "/" + month + "/" + date);
-
   const datestr = year + "/" + month + "/" + date;
 
   useOnClickOutside(modal, () => {
