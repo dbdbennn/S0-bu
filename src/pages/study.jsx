@@ -19,11 +19,13 @@ function Study() {
 
   const [studyTime, setStudyTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
+
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('로그인 상태: 로그인됨' + user.uid);
-        console.log('roomID : ' + router.query.roomId);
+        console.log('roomID : ' + router.query.roomID);
 
         // Firebase에서 시간 가져오기
         async function fetchStudyTimeFromFirebase() {
