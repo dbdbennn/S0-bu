@@ -15,7 +15,7 @@ let studyroomRefs = [];
 
 // Firebase 초기화 및 Firestore 가져오기
 const admin = require('firebase-admin');
-const serviceAccount = require('../../study-0-c5302-firebase-adminsdk-w31t0-a72b9187d1.json');
+const serviceAccount = require('./study-0-c5302-firebase-adminsdk-w31t0-a72b9187d1.json');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
