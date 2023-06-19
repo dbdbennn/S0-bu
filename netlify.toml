@@ -1,0 +1,3 @@
+[build]
+  command = "node socketServer.js && npm run build"
+  publish = "public"
