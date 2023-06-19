@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getAuth, signInWithEmailAndPassword, AuthErrorCodes } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, AuthErrorCodes, onAuthStateChanged } from 'firebase/auth';
 import firebaseApp from '../../firebase';
 import styles from '../styles/signin.module.css';
 import Swal from "sweetalert2";
@@ -12,12 +12,24 @@ function Signin() {
   const [password, setPassword] = useState('');
   const [windowWidth, setWindowWidth] = useState();
   const router = useRouter();
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleSignIn();
     }
   };
+
+  useEffect(() => {
+    const auth = getAuth(firebaseApp);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedIn(true);
+        console.log("로그인 상태: 로그인됨" + user.uid);
+        router.push('/community');
+      }
+    })
+  });
 
   // 반응형
   useEffect(() => {
