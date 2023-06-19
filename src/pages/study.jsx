@@ -76,7 +76,7 @@ function Study() {
       <div className={styles.box}>
         {roomID && (
           <img
-            src={`/study/${roomID}`}
+            src="/images/girl_longhair_desk.png"
             className={styles.desk_img}
             alt="Girl with long hair at the desk"
           />
