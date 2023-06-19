@@ -84,8 +84,8 @@
   gap: 10px;
 }
 
-.redTimer {
-  color: rgb(255, 115, 0);
+.colorTimer {
+  color: #69B567;
 }
 
 .timer_img {
