@@ -31,9 +31,6 @@ function Characters() {
     const chkChar = () => {
         Swal.fire({
             title: "해당 캐릭터를 선택하시겠나요?",
-            html: `
-            캐릭터는 한 번만 선택할 수 있어요.
-            `,
             confirmButtonText: "확인",
             cancelButtonText: "취소",
             showCancelButton: true,
@@ -75,7 +72,7 @@ function Characters() {
                     characterId: selectedCharacter,
                 });
                 console.log('캐릭터 정보가 성공적으로 업데이트되었습니다.');
-                router.push(`/characters?userId=${user.uid}`);
+                router.push(`/mypage`);
                 Swal.fire({
                     title: "캐릭터 저장",
                     html: `

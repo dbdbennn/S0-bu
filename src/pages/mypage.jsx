@@ -308,6 +308,10 @@ function MyPage() {
       }
     }
   };
+
+  const userCharChg = () => {
+    router.push('/characters');
+  }
   
 
 
@@ -338,7 +342,8 @@ function MyPage() {
             <div className={Styles.userinfo}>
               <p className={Styles.username}>{displayName}</p>
               <p className={Styles.useremail}>{email}</p>
-              <button className={Styles.userLogout} onClick={chkLogout}>로그아웃</button>
+              <button className={`${Styles.btns} ${Styles.fbtn}`} onClick={chkLogout}>로그아웃</button>
+              <button className={Styles.btns} onClick={userCharChg}>캐릭터 변경</button>
             </div>
           </div>
 
