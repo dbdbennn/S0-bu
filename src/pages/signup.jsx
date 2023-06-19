@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged } from "firebase/auth";
 import styles from "../styles/signup.module.css";
 import firebaseApp from "../../firebase";
 import { useRouter } from "next/router";
@@ -13,6 +13,18 @@ function signup() {
   const [nickname, setNickname] = useState("");
   const [windowWidth, setWindowWidth] = useState();
   const router = useRouter();
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const auth = getAuth(firebaseApp);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedIn(true);
+        console.log("로그인 상태: 로그인됨" + user.uid);
+        router.push('/community');
+      }
+    })
+  });
 
   // 반응형
   useEffect(() => {
@@ -131,6 +143,10 @@ function signup() {
     router.push('/signin');
   }
 
+  const goToStartPage = () => {
+    router.push('/startpage');
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -182,7 +198,10 @@ function signup() {
         <button className={styles.register} onClick={handleRegisterClick}>
           next
         </button>
-        <div className={styles.goToSignin} onClick={goToSignin}>로그인</div>
+        <div className={styles.links}>
+          <div className={styles.goToSignin} onClick={goToStartPage}>홈</div>
+          <div className={styles.goToSignin} onClick={goToSignin}>로그인</div>
+        </div>
       </div>
     </>
   );

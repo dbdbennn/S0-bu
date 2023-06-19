@@ -45,7 +45,7 @@ function Study() {
         fetchStudyTimeFromFirebase();
       } else {
         console.log('로그인 상태: 로그인되지 않음');
-        router.push('/signin'); // 로그인되지 않은 경우 /signin 페이지로 이동
+        router.push('/startpage'); // 로그인되지 않은 경우 /startpage 페이지로 이동
       }
     });
 
@@ -74,14 +74,73 @@ function Study() {
 
       <div className={styles.studyContainer}>
       <div className={styles.box}>
-        {roomID && (
-          <img
+        
+          <div className={styles.usersDiv}>
+            <div className={styles.nickName}>유정은</div>
+            <img
             src="/images/girl_longhair_desk.png"
             className={styles.desk_img}
             alt="Girl with long hair at the desk"
           />
-        )}
-        </div>
+          </div>
+          <div className={styles.usersDiv}>
+            <div className={styles.nickName}>유정은</div>
+            <img
+            src="/images/girl_longhair_desk.png"
+            className={styles.desk_img}
+            alt="Girl with long hair at the desk"
+          />
+          </div>
+          <div className={styles.usersDiv}>
+            <div className={styles.nickName}>유정은</div>
+            <img
+            src="/images/girl_longhair_desk.png"
+            className={styles.desk_img}
+            alt="Girl with long hair at the desk"
+          />
+          </div>
+          <div className={styles.usersDiv}>
+            <div className={styles.nickName}>유정은</div>
+            <img
+            src="/images/girl_longhair_desk.png"
+            className={styles.desk_img}
+            alt="Girl with long hair at the desk"
+          />
+          </div>
+          <div className={styles.usersDiv}>
+            <div className={styles.nickName}>유정은</div>
+            <img
+            src="/images/girl_longhair_desk.png"
+            className={styles.desk_img}
+            alt="Girl with long hair at the desk"
+          />
+          </div>
+          <div className={styles.usersDiv}>
+            <div className={styles.nickName}>유정은</div>
+            <img
+            src="/images/girl_longhair_desk.png"
+            className={styles.desk_img}
+            alt="Girl with long hair at the desk"
+          />
+          </div>
+          <div className={styles.usersDiv}>
+            <div className={styles.nickName}>유정은</div>
+            <img
+            src="/images/girl_longhair_desk.png"
+            className={styles.desk_img}
+            alt="Girl with long hair at the desk"
+          />
+          </div>
+          <div className={styles.usersDiv}>
+            <div className={styles.nickName}>유정은</div>
+            <img
+            src="/images/girl_longhair_desk.png"
+            className={styles.desk_img}
+            alt="Girl with long hair at the desk"
+          />
+          </div>
+
+      </div>
 
         <div className={styles.timer}>
           <h1>Timer</h1>
