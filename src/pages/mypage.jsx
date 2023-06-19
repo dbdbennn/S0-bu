@@ -249,7 +249,7 @@ function MyPage() {
   
         const startDate = new Date(); // 현재 날짜
         const endDate = new Date();
-        endDate.setDate(endDate.getDate() - 6); // 최근 7일 전 날짜
+        endDate.setDate(endDate.getDate() - 7); // 최근 7일 전 날짜
   
         const studyTimeData = [];
   
@@ -299,6 +299,7 @@ function MyPage() {
         }
   
         studyTimeData.reverse();
+        console.log(studyTimeData);
 
         // studyTimeData 업데이트
         setStudyTimeData(studyTimeData);
