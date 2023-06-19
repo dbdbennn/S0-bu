@@ -10,17 +10,6 @@ function StartPage() {
   const [loggedIn, setLoggedIn] = useState(false);
 
 
-  useEffect(() => {
-    const auth = getAuth(firebase);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setLoggedIn(true);
-        console.log("로그인 상태: 로그인됨" + user.uid);
-        router.push('/community');
-      }
-    })
-  });
-
   return (
     <>
       <div className={styles.logoContainer}>

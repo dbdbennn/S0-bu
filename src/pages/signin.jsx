@@ -12,24 +12,12 @@ function Signin() {
   const [password, setPassword] = useState('');
   const [windowWidth, setWindowWidth] = useState();
   const router = useRouter();
-  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleSignIn();
     }
   };
-
-  useEffect(() => {
-    const auth = getAuth(firebaseApp);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setLoggedIn(true);
-        console.log("로그인 상태: 로그인됨" + user.uid);
-        router.push('/community');
-      }
-    })
-  });
 
   // 반응형
   useEffect(() => {
@@ -79,9 +67,7 @@ function Signin() {
             confirmButtonText: "확인",
             icon: 'success',
           });
-          router.push(`/mypage?userId=${user.uid}`);
-
-          console.log('Successfully signed in:', user);
+          router.push(`/mypage`);
         })
         .catch((error) => {
           console.error('Sign-in error:', error);

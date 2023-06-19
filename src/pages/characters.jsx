@@ -47,7 +47,12 @@ function Characters() {
     const handleSubmit = async () => {
         console.log('Selected Character ID:', selectedCharacter);
         if (selectedCharacter === null) {
-            alert("캐릭터를 선택해주세요!");
+            Swal.fire({
+                title: "캐릭터를 선택해주세요!",
+                showCancelButton: false,
+                confirmButtonText: "확인",
+                icon: 'warning',
+            })
             return 0;
         }
 
