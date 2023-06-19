@@ -62,6 +62,8 @@ function Community() {
         // 사용자 정보 가져오기
         const { uid } = user;
         setUID(uid);
+        setNickname(user.displayName);
+        console.log(nickname);
 
         // 사용자 정보를 서버로 전송
         const pagePath = router.pathname;
