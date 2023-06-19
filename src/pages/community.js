@@ -46,7 +46,7 @@ function Community() {
   const [posts, setPosts] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [nickname, setNickname] = useState("");
-  const [email, setEmail] = useState("");
+  const [uid, setUID] = useState("");
   const [displayName, setDisplayName] = useState("");
 
   const router = useRouter();
@@ -60,9 +60,8 @@ function Community() {
         console.log("로그인 상태: 로그인됨" + user.uid);
 
         // 사용자 정보 가져오기
-        const { displayName, email } = user;
-        setNickname(displayName); // 사용자의 displayName을 nickname으로 설정
-        setEmail(email);
+        const { uid } = user;
+        setUID(uid);
 
         // 사용자 정보를 서버로 전송
         const pagePath = router.pathname;
@@ -78,8 +77,8 @@ function Community() {
 
   // 현재 접속한 이메일 출력
   useEffect(() => {
-    console.log("User uid in Community:", email);
-  }, [email]);
+    console.log("User uid in Community:", uid);
+  }, [uid]);
 
   // modal
   const openModal = () => {
@@ -217,41 +216,6 @@ function Community() {
       </div>
     );
   };
-
-  // // 소켓 클라이언트 코드 시작점
-  useEffect(() => {
-    const socket = io.connect("http://localhost:4000");
-
-    const auth = getAuth(firebase);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setLoggedIn(true);
-        console.log("로그인 상태: 로그인됨" + user.uid);
-
-        // 사용자 정보 가져오기
-        const { displayName, email, uid } = user;
-        setDisplayName(displayName);
-        setEmail(uid);
-
-        // 사용자 정보를 서버로 전송
-        const pagePath = router.pathname;
-        socket.emit("userConnected", { displayName, uid, pagePath });
-      } else {
-        setLoggedIn(false);
-        console.log("로그인 상태: 로그인되지 않음");
-      }
-    });
-
-    // 서버로부터 전달된 이메일 정보를 받아와서 상태 업데이트
-    socket.on("userEmail", (userEmail) => {
-      setEmail(userEmail);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [router.pathname]);
-  // // 소켓 클라이언트 코드 끝
 
   return (
     <div className={styles.App}>
