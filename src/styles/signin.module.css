@@ -64,6 +64,11 @@
     cursor: pointer;
 }
 
+.links{
+    display: flex;
+    gap: 18px;
+}
+
 @media screen and (max-width:1024px) {
     .title {
         font-size: 40px;
@@ -130,5 +135,9 @@
 
     .message {
         font-size: 10px;
+    }
+
+    .goToSignup {
+        font-size: 14px;
     }
 }

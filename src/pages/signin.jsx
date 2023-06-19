@@ -116,6 +116,10 @@ function Signin() {
     router.push('/signup');
   }
 
+  const goToStartPage = () => {
+    router.push('/startpage');
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -148,7 +152,10 @@ function Signin() {
         <button className={styles.register} onClick={handleSignIn}>
           next
         </button>
-        <div className={styles.goToSignup} onClick={goToSignup}>회원가입</div>
+        <div className={styles.links}>
+          <div className={styles.goToSignup} onClick={goToStartPage}>홈</div>
+          <div className={styles.goToSignup} onClick={goToSignup}>회원가입</div>
+        </div>
 
       </div>
     </>
