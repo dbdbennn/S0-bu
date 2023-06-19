@@ -73,7 +73,7 @@ function MyPage() {
 
             setLoggedIn(false);
           console.log("로그인 상태: 로그인되지 않음");
-          router.push('/signin'); // 로그인되지 않은 경우 /signin 페이지로 이동
+          router.push('/startpage'); // 로그인되지 않은 경우 /signin 페이지로 이동
           }
         });
 
