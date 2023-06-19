@@ -79,6 +79,8 @@ function Timer() {
     if (!isRunning) {
       setIsRunning(true);
       console.log("타이머가 시작되었습니다.");
+
+      
     }
   };
 
@@ -92,7 +94,7 @@ function Timer() {
 
   return (
     <div>
-      <p>
+      <p className={isRunning ? styles.redTimer : null}>
         {time.hours < 10 ? "0" + time.hours : time.hours}:
         {time.minutes < 10 ? "0" + time.minutes : time.minutes}:
         {time.seconds < 10 ? "0" + time.seconds : time.seconds}
