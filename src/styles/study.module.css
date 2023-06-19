@@ -41,8 +41,12 @@
   width: 10rem;
   height: 10rem;
   margin-top: 55px;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
+  background-color: white;
+  padding: 0px 10px 20px 20px;
+  border-radius: 10px;
+  border: 3px solid black;
 }
 
 .btnStart {
@@ -81,5 +85,16 @@
 }
 
 .redTimer {
-  color: rgb(255, 211, 15);
+  color: rgb(255, 115, 0);
+}
+
+.timer_img {
+  width: 40px;
+  height: 40px;
+}
+
+.timer_title{
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }

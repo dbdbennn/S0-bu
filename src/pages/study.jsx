@@ -143,7 +143,13 @@ function Study() {
       </div>
 
         <div className={styles.timer}>
-          <h1>Timer</h1>
+          <div className={styles.timer_title}>
+            <img
+              className={styles.timer_img}
+              src="/images/timer.png"
+            />
+            <h1>Timer</h1>
+          </div>
           <Timer studyTime={studyTime} setStudyTime={setStudyTime} />
         </div>
 
