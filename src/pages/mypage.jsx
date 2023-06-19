@@ -34,7 +34,6 @@ function MyPage() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setLoggedIn(true);
-        console.log("로그인 상태: 로그인됨" + user.uid);
 
         // 사용자 정보 가져오기
         const { displayName, email, uid } = user;
@@ -67,14 +66,7 @@ function MyPage() {
           .catch((error) => {
             console.log('Error getting user profile:', error);
           });
-          } else {
-            setLoggedIn(false);
-            console.log("로그인 상태: 로그인되지 않음");
-
-            setLoggedIn(false);
-          console.log("로그인 상태: 로그인되지 않음");
-          router.push('/startpage'); // 로그인되지 않은 경우 /signin 페이지로 이동
-          }
+        }
         });
 
         return () => {
@@ -108,7 +100,7 @@ function MyPage() {
         }
     })
   }
-  ///////////////////////////////
+  ////////////////////////////////////////////
 
   // 달력 및 공부 시간 변경
   useEffect(() => {
@@ -227,7 +219,6 @@ function MyPage() {
 
         const totalTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
         setMonthTotal(totalTime); // 총 공부 시간 업데이트
-        console.log(totalTime);
       } catch (error) {
         console.log('Error fetching study time data:', error);
       }
@@ -267,7 +258,6 @@ function MyPage() {
           // 시작 날짜부터 종료 날짜까지의 데이터만 처리
           if (documentDate >= endDate && documentDate <= startDate) {
             const { hours, minutes, seconds } = doc.data();
-            console.log(documentDate);
   
             // 시간, 분, 초를 두 자리 숫자로 포맷팅
             const formattedHours = hours.toString().padStart(2, '0');
@@ -299,7 +289,6 @@ function MyPage() {
         }
   
         studyTimeData.reverse();
-        console.log(studyTimeData);
 
         // studyTimeData 업데이트
         setStudyTimeData(studyTimeData);
