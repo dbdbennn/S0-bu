@@ -78,68 +78,67 @@ function Study() {
           <div className={styles.usersDiv}>
             <div className={styles.nickName}>유정은</div>
             <img
-            src="/images/girl_longhair_desk.png"
-            className={styles.desk_img}
-            alt="Girl with long hair at the desk"
-          />
+              src="/images/girl_longhair_desk_h.png"
+              className={styles.desk_img}
+              alt="Girl with long hair at the desk"
+            />
           </div>
           <div className={styles.usersDiv}>
             <div className={styles.nickName}>유정은</div>
             <img
-            src="/images/girl_longhair_desk.png"
-            className={styles.desk_img}
-            alt="Girl with long hair at the desk"
-          />
+              src="/images/girl_shorthair_desk_h.png"
+              className={styles.desk_img}
+              alt="Girl with long hair at the desk"
+            />
           </div>
           <div className={styles.usersDiv}>
             <div className={styles.nickName}>유정은</div>
             <img
-            src="/images/girl_longhair_desk.png"
-            className={styles.desk_img}
-            alt="Girl with long hair at the desk"
-          />
+              src="/images/boy_blackhair_desk_h.png"
+              className={styles.desk_img}
+              alt="Girl with long hair at the desk"
+            />
           </div>
           <div className={styles.usersDiv}>
             <div className={styles.nickName}>유정은</div>
             <img
-            src="/images/girl_longhair_desk.png"
-            className={styles.desk_img}
-            alt="Girl with long hair at the desk"
-          />
+              src="/images/boy_brownhair_desk_h.png"
+              className={styles.desk_img}
+              alt="Girl with long hair at the desk"
+            />
           </div>
           <div className={styles.usersDiv}>
             <div className={styles.nickName}>유정은</div>
             <img
-            src="/images/girl_longhair_desk.png"
-            className={styles.desk_img}
-            alt="Girl with long hair at the desk"
-          />
+              src="/images/girl_longhair_desk_h.png"
+              className={styles.desk_img}
+              alt="Girl with long hair at the desk"
+            />
           </div>
           <div className={styles.usersDiv}>
             <div className={styles.nickName}>유정은</div>
             <img
-            src="/images/girl_longhair_desk.png"
-            className={styles.desk_img}
-            alt="Girl with long hair at the desk"
-          />
+              src="/images/girl_shorthair_desk_h.png"
+              className={styles.desk_img}
+              alt="Girl with long hair at the desk"
+            />
           </div>
           <div className={styles.usersDiv}>
             <div className={styles.nickName}>유정은</div>
             <img
-            src="/images/girl_longhair_desk.png"
-            className={styles.desk_img}
-            alt="Girl with long hair at the desk"
-          />
+              src="/images/boy_blackhair_desk_h.png"
+              className={styles.desk_img}
+              alt="Girl with long hair at the desk"
+            />
           </div>
           <div className={styles.usersDiv}>
             <div className={styles.nickName}>유정은</div>
             <img
-            src="/images/girl_longhair_desk.png"
-            className={styles.desk_img}
-            alt="Girl with long hair at the desk"
-          />
+              src="/images/boy_brownhair_desk_h.png"
+              className={styles.desk_img}
+              alt="Girl with long hair at the desk"
+            />
           </div>
-
       </div>
 
         <div className={styles.timer}>
