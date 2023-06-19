@@ -146,6 +146,7 @@ function Community() {
       roomID,
       date: datestr, // 날짜 저장
       timestamp: today,
+      nickname: nickname,
     });
 
     setTitle("");
@@ -212,7 +213,7 @@ function Community() {
     return (
       <div className={styles.post} onClick={handlePostClick}>
         <h1 className={styles["post-title"]}>{post.title}</h1>
-        <p className={styles["post-writer"]}>{nickname}</p>
+        <p className={styles["post-writer"]}>{post.nickname}</p>
         <p className={styles["post-date"]}>{datestr}</p>
         <p className={styles["post-content"]}>{post.content}</p>
       </div>
