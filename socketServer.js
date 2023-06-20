@@ -64,6 +64,11 @@ io.on("connection", (socket) => {
 
 
     // Firestore에 문서 생성 또는 가져오기
+    if (!userRoomID || userRoomID.trim() === "") {
+      console.error("Invalid userRoomID:", userRoomID);
+      return;
+    }
+    
     const studyroomRef = db.collection("studyroom").doc(userRoomID);
     studyroomRefs.push(studyroomRef); // 배열에 참조 추가
     studyroomRef
@@ -95,7 +100,6 @@ io.on("connection", (socket) => {
         console.error("Error getting studyroom document:", error);
       });
 
-    // 현재 접속 중인 모든 클라이언트에게 이메일 정보 전달
     io.emit("userUID", userUID);
 
     // 현재 저장된 모든 사용자 정보 가져오기
