@@ -1,32 +1,69 @@
-import firebase from '../../firebase';
-// import firebase from "firebase/app";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { getFirestore, collection, query, where, getDocs, doc, getDoc, listCollections } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged, getUser } from 'firebase/auth';
+import io from 'socket.io-client';
 import styles from '../styles/study.module.css';
-import React, { useState, useEffect, useRef } from 'react';
 import Timer from '../../src/Timer';
-import navStyles from "../styles/nav.module.css";
+import navStyles from '../styles/nav.module.css';
 import Image from 'next/image';
 import logo from '../../public/images/logo.png';
-import { useRouter } from 'next/router';
-import { getFirestore, getDocs, collection, query } from 'firebase/firestore';
+import firebase from '../../firebase';
 import { format } from 'date-fns';
-import db from "../net/db";
-import { doc, getDoc } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import io from "socket.io-client";
 
 function Study() {
   const router = useRouter();
-  const db = getFirestore();
-  const auth = getAuth();
-  const currentDate = format(new Date(), 'yyyyMMdd'); // 현재 날짜를 YYYYMMDD 형식으로 포맷
-  const { roomID } = router.query; // 수정: roomID 변수명을 정확하게 변경
+  const db = getFirestore(firebase);
+  const auth = getAuth(firebase);
+  const currentDate = format(new Date(), 'yyyyMMdd');
+  const { roomID } = router.query;
   const [loggedIn, setLoggedIn] = useState(false);
-  const [nickname, setNickname] = useState("");
-  const [uid, setUID] = useState("");
-  const [displayName, setDisplayName] = useState("");
+  const [nickname, setNickname] = useState('');
+  const [uid, setUID] = useState('');
+  const [users, setUsers] = useState([]);
 
   const [studyTime, setStudyTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
-  
+
+  useEffect(() => {
+  const fetchUserCharacters = async () => {
+    try {
+      const db = getFirestore(firebase);
+      const studyroomRef = doc(db, 'studyroom', roomID);
+      const studyroomDoc = await getDoc(studyroomRef);
+
+      if (studyroomDoc.exists()) {
+        const { uids } = studyroomDoc.data();
+        console.log('uids:', uids);
+        const users = [];
+
+        for (const uid of uids) {
+          const userDocRef = doc(db, 'users', uid);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const { characterId, nickname } = userData;
+            users.push({ characterId, nickname });
+          }
+        }
+        //for end
+        
+
+        // Perform additional tasks with the users array
+        console.log('Users:', users);
+        setUsers(users);
+      } else {
+        console.log('Study room document does not exist');
+      }
+    } catch (error) {
+      console.error('컬렉션 가져오기 중 오류가 발생했습니다:', error);
+    }
+  };
+
+  fetchUserCharacters();
+}, [db, roomID]);
+
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -35,11 +72,9 @@ function Study() {
         console.log('roomID : ' + router.query.roomID);
         console.log(roomID);
 
-        // 사용자 정보 가져오기
-        const { uid } = user;
+        const { uid, displayName } = user;
         setUID(uid);
 
-        // Firebase에서 시간 가져오기
         async function fetchStudyTimeFromFirebase() {
           try {
             const uid = user.uid;
@@ -59,7 +94,7 @@ function Study() {
         fetchStudyTimeFromFirebase();
       } else {
         console.log('로그인 상태: 로그인되지 않음');
-        router.push('/startpage'); // 로그인되지 않은 경우 /startpage 페이지로 이동
+        router.push('/startpage');
       }
     });
 
@@ -68,30 +103,26 @@ function Study() {
     };
   }, [auth, currentDate, db, router, router.query.roomID]);
 
-  // 소켓 클라이언트 코드 시작점
   useEffect(() => {
-    const socket = io.connect("http://localhost:4000");
+    const socket = io.connect('http://localhost:4000');
 
     const auth = getAuth(firebase);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setLoggedIn(true);
-        console.log("로그인 상태: 로그인됨" + user.uid);
+        console.log('로그인 상태: 로그인됨' + user.uid);
 
-        // 사용자 정보 가져오기
         const { uid } = user;
         setUID(uid);
 
-        // 사용자 정보를 서버로 전송
-        socket.emit("userConnected", { uid, roomID });
+        socket.emit('userConnected', { uid, roomID });
       } else {
         setLoggedIn(false);
-        console.log("로그인 상태: 로그인되지 않음");
+        console.log('로그인 상태: 로그인되지 않음');
       }
     });
 
-    // 서버로부터 전달된 이메일 정보를 받아와서 상태 업데이트
-    socket.on("userUID", (userUID) => {
+    socket.on('userUID', (userUID) => {
       setUID(userUID);
     });
 
@@ -99,13 +130,14 @@ function Study() {
       unsubscribe();
     };
   }, [uid, roomID]);
-  // 소켓 클라이언트 코드 끝
+
+  
 
   return (
     <div className={styles.App}>
       <nav className={navStyles.nav}>
         <div className={navStyles['nav-container']}>
-        <a className={navStyles.logo} href="/community">
+          <a className={navStyles.logo} href="/community">
             <Image className={navStyles['logo-img']} src={logo} alt="Logo" />
           </a>
           <ul className={navStyles['nav-list']}>
@@ -120,86 +152,27 @@ function Study() {
       </nav>
 
       <div className={styles.studyContainer}>
-      <div className={styles.box}>
-        
-          <div className={styles.usersDiv}>
-            <div className={styles.nickName}>유정은</div>
+        <div className={styles.box}>
+        {users.map((user) => (
+          <div key={user.uid} className={styles.usersDiv}>
+            
+            <div className={styles.nickName}>{user.nickname}</div> {/* 수정 */}
             <img
-              src="/images/girl_longhair_desk_h.png"
+              src={`/images/${user.characterId}_desk_h.png`}
               className={styles.desk_img}
-              alt="Girl with long hair at the desk"
+              alt={`Character ${user.characterId} at the desk`}
             />
           </div>
-          <div className={styles.usersDiv}>
-            <div className={styles.nickName}>유정은</div>
-            <img
-              src="/images/girl_shorthair_desk_h.png"
-              className={styles.desk_img}
-              alt="Girl with long hair at the desk"
-            />
-          </div>
-          <div className={styles.usersDiv}>
-            <div className={styles.nickName}>유정은</div>
-            <img
-              src="/images/boy_blackhair_desk_h.png"
-              className={styles.desk_img}
-              alt="Girl with long hair at the desk"
-            />
-          </div>
-          <div className={styles.usersDiv}>
-            <div className={styles.nickName}>유정은</div>
-            <img
-              src="/images/boy_brownhair_desk_h.png"
-              className={styles.desk_img}
-              alt="Girl with long hair at the desk"
-            />
-          </div>
-          <div className={styles.usersDiv}>
-            <div className={styles.nickName}>유정은</div>
-            <img
-              src="/images/girl_longhair_desk_h.png"
-              className={styles.desk_img}
-              alt="Girl with long hair at the desk"
-            />
-          </div>
-          <div className={styles.usersDiv}>
-            <div className={styles.nickName}>유정은</div>
-            <img
-              src="/images/girl_shorthair_desk_h.png"
-              className={styles.desk_img}
-              alt="Girl with long hair at the desk"
-            />
-          </div>
-          <div className={styles.usersDiv}>
-            <div className={styles.nickName}>유정은</div>
-            <img
-              src="/images/boy_blackhair_desk_h.png"
-              className={styles.desk_img}
-              alt="Girl with long hair at the desk"
-            />
-          </div>
-          <div className={styles.usersDiv}>
-            <div className={styles.nickName}>유정은</div>
-            <img
-              src="/images/boy_brownhair_desk_h.png"
-              className={styles.desk_img}
-              alt="Girl with long hair at the desk"
-            />
-          </div>
-      </div>
+        ))}
+        </div>
 
         <div className={styles.timer}>
           <div className={styles.timer_title}>
-            <img
-              className={styles.timer_img}
-              src="/images/timer.png"
-            />
+            <img className={styles.timer_img} src="/images/timer.png" />
             <h1>Timer</h1>
           </div>
           <Timer studyTime={studyTime} setStudyTime={setStudyTime} />
         </div>
-
-        
       </div>
     </div>
   );
