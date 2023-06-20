@@ -48,6 +48,7 @@ function Community() {
   const [nickname, setNickname] = useState("");
   const [uid, setUID] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [roomIdErrorMessage, setRoomIdErrorMessage] = useState("");
 
   const router = useRouter();
   const modal = useRef(null);
@@ -106,11 +107,18 @@ function Community() {
   const handleRoomIDChange = (e) => {
     const inputValue = e.target.value;
     const englishRegex = /^[a-zA-Z0-9]*$/;
-    if (englishRegex.test(inputValue) && inputValue.length <= 20) {
-      setRoomIdError(false);
-      setRoomID(inputValue);
-    } else {
+    if (!englishRegex.test(inputValue)) {
       setRoomIdError(true);
+      setRoomIdErrorMessage("스터디룸 아이디는 영어와 숫자로만 가능합니다.");
+    } else if (inputValue.length > 20) {
+      setRoomIdError(true);
+      setRoomIdErrorMessage(
+        "스터디룸 아이디는 최대 20자까지 입력할 수 있습니다."
+      );
+    } else {
+      setRoomIdError(false);
+      setRoomIdErrorMessage("");
+      setRoomID(inputValue);
     }
   };
 
@@ -132,6 +140,7 @@ function Community() {
     if (roomDoc.exists()) {
       // 이미 존재하는 roomID인 경우 오류 처리
       setRoomIdError(true);
+      setRoomIdErrorMessage("이미 존재하는 스터디룸 ID입니다.");
       return;
     }
 
@@ -280,9 +289,7 @@ function Community() {
                 className={roomIDInputStyles}
               />
               {roomIdError && (
-                <p className={styles.errorMessage}>
-                  * 해당 스터디룸 ID는 이미 존재합니다.
-                </p>
+                <p className={styles.errorMessage}>* {roomIdErrorMessage}</p>
               )}
               {missingFieldsError && (
                 <p className={styles.errorMessage}>* 모든 칸을 입력해주세요.</p>
