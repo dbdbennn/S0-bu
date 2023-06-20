@@ -52,6 +52,11 @@ function Study() {
         // Perform additional tasks with the users array
         console.log('Users:', users);
         setUsers(users);
+
+        const intervalId = setInterval(fetchUserCharacters, 5000);
+          return () => {
+            clearInterval(intervalId);
+          };
       } else {
         console.log('Study room document does not exist');
       }
@@ -59,6 +64,7 @@ function Study() {
       console.error('컬렉션 가져오기 중 오류가 발생했습니다:', error);
     }
   };
+  
 
   fetchUserCharacters();
 }, [db, roomID]);
