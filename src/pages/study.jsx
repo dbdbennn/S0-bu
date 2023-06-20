@@ -33,13 +33,11 @@ function Study() {
         setLoggedIn(true);
         console.log('로그인 상태: 로그인됨' + user.uid);
         console.log('roomID : ' + router.query.roomID);
+        console.log(roomID);
 
         // 사용자 정보 가져오기
         const { uid } = user;
         setUID(uid);
-
-        // 사용자 정보를 서버로 전송
-        const pagePath = router.pathname;
 
         // Firebase에서 시간 가져오기
         async function fetchStudyTimeFromFirebase() {
@@ -68,10 +66,9 @@ function Study() {
     return () => {
       unsubscribe();
     };
-  }, [auth, currentDate, db, router, roomID]);
+  }, [auth, currentDate, db, router, router.query.roomID]);
 
-
-  // // 소켓 클라이언트 코드 시작점
+  // 소켓 클라이언트 코드 시작점
   useEffect(() => {
     const socket = io.connect("http://localhost:4000");
 
@@ -86,8 +83,7 @@ function Study() {
         setUID(uid);
 
         // 사용자 정보를 서버로 전송
-        const pagePath = router.pathname;
-        socket.emit("userConnected", { uid, pagePath });
+        socket.emit("userConnected", { uid, roomID });
       } else {
         setLoggedIn(false);
         console.log("로그인 상태: 로그인되지 않음");
@@ -102,8 +98,8 @@ function Study() {
     return () => {
       unsubscribe();
     };
-  }, [router.pathname]);
-  // // 소켓 클라이언트 코드 끝
+  }, [uid, roomID]);
+  // 소켓 클라이언트 코드 끝
 
   return (
     <div className={styles.App}>

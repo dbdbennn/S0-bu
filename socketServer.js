@@ -57,12 +57,14 @@ io.on("connection", (socket) => {
     // 소켓에 userUID 속성으로 저장
     socket.userUID = userUID;
 
-    // 페이지 경로 가져오기
-    const pagePath = userInfo.pagePath;
-    console.log("Page path:", pagePath);
+    const userRoomID = userInfo.roomID;
+    console.log("roomID", userRoomID);
+
+    socket.userRoomID = userRoomID;
+
 
     // Firestore에 문서 생성 또는 가져오기
-    const studyroomRef = db.collection("studyroom").doc(pagePath);
+    const studyroomRef = db.collection("studyroom").doc(userRoomID);
     studyroomRefs.push(studyroomRef); // 배열에 참조 추가
     studyroomRef
       .get()
