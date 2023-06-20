@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 import styles from "../styles/signup.module.css";
 import firebaseApp from "../../firebase";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2"
+
 
 function signup() {
   const inputRef = useRef(null);
@@ -13,6 +15,7 @@ function signup() {
   const [nickname, setNickname] = useState("");
   const [windowWidth, setWindowWidth] = useState();
   const router = useRouter();
+  const db = getFirestore(firebaseApp);
   const [loggedIn, setLoggedIn] = useState(false);
 
   // 반응형
@@ -86,6 +89,12 @@ function signup() {
           displayName: nickname
         })
           .then(() => {
+
+            const userDoc = doc(db, "users", result.user.uid);
+
+            setDoc(userDoc, {
+              nickname: nickname,
+            })
             console.log(result.user);
             Swal.fire({
               title: "회원가입 성공!",
