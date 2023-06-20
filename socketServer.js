@@ -29,16 +29,19 @@ io.on("connection", (socket) => {
   // 연결 해제 시 실행되는 이벤트 핸들러
   socket.on("disconnect", () => {
     console.log("user disconnected");
-
+  
     if (socket.userUID && studyroomRefs.length > 0) {
-      studyroomRefs.forEach((studyroomRef) => {
+      const userUID = socket.userUID;
+  
+      studyroomRefs.forEach((studyroomRef, index) => {
         // Firebase Firestore에서 해당 UID 제거
         studyroomRef
           .update({
-            uids: admin.firestore.FieldValue.arrayRemove(socket.userUID),
+            uids: admin.firestore.FieldValue.arrayRemove(userUID),
           })
           .then(() => {
             console.log("User uid removed from Firestore");
+            studyroomRefs.splice(index, 1); // 배열에서 참조 제거
           })
           .catch((error) => {
             console.error("Error removing user uid from Firestore:", error);
@@ -46,6 +49,7 @@ io.on("connection", (socket) => {
       });
     }
   });
+  
 
   socket.on("userConnected", (userInfo) => {
     console.log("Received user information:", userInfo);
