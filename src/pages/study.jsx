@@ -43,7 +43,7 @@ function Study() {
           if (userDoc.exists()) {
             const userData = userDoc.data();
             const { characterId, nickname } = userData;
-            users.push({ characterId, nickname });
+            users.push({ uid, characterId, nickname });
           }
         }
         //for end
@@ -58,7 +58,11 @@ function Study() {
             clearInterval(intervalId);
           };
       } else {
-        console.log('Study room document does not exist');
+        const intervalId = setInterval(fetchUserCharacters, 5000);
+        return () => {
+          clearInterval(intervalId);
+          console.log('Study room document does not exist');
+        };
       }
     } catch (error) {
       console.error('컬렉션 가져오기 중 오류가 발생했습니다:', error);
