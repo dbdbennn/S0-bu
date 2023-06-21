@@ -95,7 +95,7 @@ function Timer() {
 
   return (
     <div>
-      <p className={isRunning ? styles.colorTimer : null}>
+      <p className={isRunning ? styles.colorTimer : null} style={{ fontSize: '22px', marginTop: '10px'}}>
         {time.hours < 10 ? "0" + time.hours : time.hours}:
         {time.minutes < 10 ? "0" + time.minutes : time.minutes}:
         {time.seconds < 10 ? "0" + time.seconds : time.seconds}

@@ -179,7 +179,7 @@ function Study() {
         <div className={styles.timer}>
           <div className={styles.timer_title}>
             <img className={styles.timer_img} src="/images/timer.png" />
-            <h1>Timer</h1>
+            <h1 className={styles.title}>Timer</h1>
           </div>
           <Timer studyTime={studyTime} setStudyTime={setStudyTime} />
         </div>
