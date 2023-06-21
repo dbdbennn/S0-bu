@@ -62,7 +62,14 @@ function signup() {
     }
 
     if(!chkpw.test(password)) {
-      alert("최소 8자, 하나 이상의 문자와 숫자를 사용해주세요.")
+      let errorMessage = ("최소 8자, 하나 이상의 문자와 숫자를 사용해주세요.");
+      Swal.fire({
+        title: "회원가입 실패",
+        html: errorMessage,
+        showCancelButton: false,
+        confirmButtonText: "확인",
+        icon: 'warning',
+      })
       return;
     }
 
