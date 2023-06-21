@@ -61,10 +61,10 @@ function signup() {
       return;
     }
 
-    // if(!chkpw.test(password)) {
-    //   alert("최소 8자, 하나 이상의 문자와 숫자를 사용해주세요.")
-    //   return;
-    // }
+    if(!chkpw.test(password)) {
+      alert("최소 8자, 하나 이상의 문자와 숫자를 사용해주세요.")
+      return;
+    }
 
     // 비밀번호 일치 여부 확인
     if (password !== passwordConfirmation) {
